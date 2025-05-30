@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inmobiliaria.backend.dto.AuthResponse;
 import com.inmobiliaria.backend.dto.LoginRequest;
 import com.inmobiliaria.backend.dto.RegisterRequest;
+import com.inmobiliaria.backend.exception.AdminYaExisteException;
 import com.inmobiliaria.backend.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<AuthResponse> registrar(@RequestBody RegisterRequest request){
+    public ResponseEntity<AuthResponse> registrar(@RequestBody RegisterRequest request) throws AdminYaExisteException{
         return ResponseEntity.ok(authService.registrarAdmin(request));
     }
 
