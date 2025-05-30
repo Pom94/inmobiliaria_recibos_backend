@@ -1,5 +1,6 @@
 package com.inmobiliaria.backend.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.inmobiliaria.backend.dto.AuthResponse;
@@ -18,6 +19,7 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthResponse login(LoginRequest request) {
         return null;
@@ -32,7 +34,7 @@ public class AuthService {
 
         Usuario usuario = Usuario.builder()
         .username(request.getUsername())
-        .password(request.getPassword())
+        .password(passwordEncoder.encode(request.getPassword()))
         .rol(Rol.ADMIN)
         .build();
 
