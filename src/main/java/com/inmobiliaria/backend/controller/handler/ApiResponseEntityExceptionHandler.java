@@ -8,17 +8,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.AdminYaExisteException;
 
 @ControllerAdvice
 public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHandler{
 
     @ExceptionHandler(value = {AdminYaExisteException.class})
-    protected ResponseEntity<Object> handlerExisteException(Exception e, WebRequest request){
-        String exceptionMessage = e.getMessage();
+    protected ResponseEntity<Object> handlerExisteException(Exception ex, WebRequest request){
+        String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorMessage(exceptionMessage);
-        return handleExceptionInternal(e, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
+    @ExceptionHandler(value = {AdminNoEncontradoException.class})
+    protected ResponseEntity<Object> handlerNoEncontrado(Exception ex, WebRequest request){
+        String exceptionMessage = ex.getMessage();
+        CustomApiError error = new CustomApiError();
+        error.setErrorMessage(exceptionMessage);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 }

@@ -26,6 +26,9 @@ public class Usuario implements UserDetails{
     @Column(nullable = false)
     String username;
     String password;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Recibo> recibos;
     @Enumerated(EnumType.STRING)
     Rol rol;
 
