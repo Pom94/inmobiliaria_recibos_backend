@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponse {
-    private String token;
+public class MedioPagoResponse {
+    private String medioPago;
+    private Double importePago;
+
 }

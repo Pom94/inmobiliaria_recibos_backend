@@ -38,7 +38,7 @@ public class Recibo {
     private String cuitCliente;
     private String localidadCliente;
 
-    private Integer numContrato;
+    private String numContrato;
     private Date inicioContrato;
     private Date finContrato;
     private String propietario;
@@ -51,8 +51,9 @@ public class Recibo {
     private List<Concepto> conceptos;
 
     private Double subtotal;
-    private String medioPago;
-    private Double importePago;
+    @ElementCollection
+    @CollectionTable(name = "recibo_mediosPagos", joinColumns = @JoinColumn(name = "recibo_id"))
+    private List<MedioPago> mediosPagos;
     private Double total;
     private String pesos;
 

@@ -1,5 +1,6 @@
 package com.inmobiliaria.backend.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class ReciboController {
     private final ReciboService reciboService;
     
     @PostMapping("/crear")
-    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException{
+    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException{
         ReciboResponse creado = reciboService.crearRecibo(request);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()

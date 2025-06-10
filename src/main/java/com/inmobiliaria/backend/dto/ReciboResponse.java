@@ -22,7 +22,7 @@ public class ReciboResponse {
     private String cuitCliente;
     private String localidadCliente;
     
-    private Integer numContrato;
+    private String numContrato;
     private Date inicioContrato;
     private Date finContrato;
     private String propietario;
@@ -33,8 +33,9 @@ public class ReciboResponse {
     private List<ConceptoResponse> conceptos;
     
     private Double subtotal;
-    private String medioPago;
-    private Double importePago;
+    private List<MedioPagoResponse> mediosPagos;
+    /*private String medioPago;
+    private Double importePago;*/
     private Double total;
     private String pesos;
 }

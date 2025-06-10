@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .page {
+      width: 210mm;
+      height: 270mm;
+      padding: 15mm;
+      box-sizing: border-box;
+    }
+    
+    h1 { text-align: left; font-size: 20px; font-weight: bold; }
+    .contenedor-header {
+        flex: 1;
+        text-align: center;
+        font-size: 8px;
+        text-align: left;
+        padding-left: 2%;
+    }
+    .contenedor-header img{
+        width: 50%;
+    }
+    .contenedor-header2 {
+        flex: 1;
+        text-align: center;
+        font-size: 8px;
+        text-align: center;
+        padding-left: 2%;
+        justify-content: flex-end;
+    }
+    .recibo-terceros{
+        font-size: 10px;
+        margin-bottom: 50px;
+    }
+    .numero-recibo{
+        font-size: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .fecha-recibo{
+        font-size: 10px;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
+    .divider { border-top: 2px solid black; }
+    .cliente-datos { font-size: 10px; padding-left: 2%;}
+    .contrato-datos { font-size: 10px; padding-left: 2%;}
+    .contenedor-conceptos { font-size: 10px; padding-left: 2%;}
+    .contract-info { margin-left: 20px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    td {
+      vertical-align: top;
+      padding: 2px 5px;
+      word-wrap: break-word;
+    }
+
+    #tabla-pie {
+      margin-top: 100px;
+    }
+
+    .total-box {
+      font-size: 15px;
+      border: 1px solid black;
+      padding: 5px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .firma {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="vertical-align: top;">
+                <div class="contenido-principal">
+                    <div class="header">
+                        <table style="width: 100%; table-layout: fixed;">
+                            <tr>
+                                <td style="width: 45%; vertical-align: top; padding-right: 10px;">
+                                    <div class="contenedor-header">
+                                        <img src="images/logo.png" alt="logo" />
+                                        <h1>Inmobiliaria Centro</h1>
+                                        <p>25 de Mayo 482, PUNTA ALTA (8109) - BUENOS AIRES</p>
+                                        <p>Nº Tel: (02932) - 434360</p>
+                                        <p>Inmobiliaria.centro@yahoo.com.ar</p>
+                                        <p>I.V.A.: RESPONSABLE MONOTRIBUTO</p>
+                                    </div>
+                                </td>
+
+                                <td style="width: 10px; vertical-align: top; text-align: center; position: relative;">
+                                    <div style="width: 2px; background-color: black; height: 200PX; margin: 0 auto; position: relative;">
+                                        <img src="images/x.png" alt="X" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 25px;" />
+                                    </div>
+                                </td>
+
+                                <td style="width: 45%; vertical-align: top; padding-left: 10px;">
+                                    <div class="contenedor-header2">
+                                        <p class="recibo-terceros">RECIBO DE ALQUILER POR CUENTA DE TERCEROS</p>
+                                        <p class="numero-recibo">Nº 0001</p>
+                                        <p class="fecha-recibo">Fecha: 00/00/0000</p>
+                                        <p>C.U.I.T Y PREVISIÓN: 20-05515193-9</p>
+                                        <p>INGRESOS BRUTOS: 20-05515193-9</p>
+                                        <p>FECHA INICIO ACTIVIDADES: 05/2012</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                                
+                    <div class="divider"></div>
+                                
+                    <table style="width: 100%; table-layout: fixed;">
+                        <tr>
+                            <td style="width: 50%; vertical-align: top;">
+                                <div class="cliente-datos">
+                                    <p><strong>Cliente: </strong>clienteApellido, clienteNombre</p>
+                                    <p><strong>Dirección: </strong>clienteDireccion</p>
+                                    <p><strong>I.V.A.: </strong> clienteIVA</p>
+                                </div>
+                            </td>
+                            <td style="width: 50%; vertical-align: top;">
+                                <div class="cliente-datos">
+                                    <p><strong>C.U.I.T.: </strong>cuitCliente</p>
+                                    <p><strong>Localidad: </strong>localidadCliente</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+
+                    <div class="divider"></div>
+                                
+                    <table>
+                        <tr>
+                            <td style="width: 50%;">
+                                <div class="contrato-datos">
+                                    <p><strong>Contrato Nº: </strong>contratoNumero</p>
+                                    <p><strong>Propiedad Calle: </strong>propiedadCalle</p>
+                                    <p><strong>Propiedad Localidad: </strong>propiedadLocalidad</p>
+                                </div>
+                            </td>
+                            <td style="width: 50%;">
+                                <div class="contrato-datos">
+                                    <span style="display: inline-block; margin-top: 10px; margin-right: 30px;"><strong>Inicio: </strong>contratoInicio</span>
+                                    <span><strong>Fin: </strong>contratoFin</span>
+                                    <p><strong>Propietario: </strong>propietarioNombre</p>
+                                    <p><strong>C.U.I.T.: </strong>propietarioCuit</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="divider"></div>
+                                
+                    <table>
+                        <tr>
+                            <td style="width: 60%;">
+                                <div class="contenedor-conceptos">
+                                    <p><strong>Concepto</strong></p>
+                                    <p>conceptos</p>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="contenedor-conceptos">
+                                    <p><strong>Periodo</strong></p>
+                                    <p>periodos</p>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="contenedor-conceptos">
+                                    <p><strong>Año</strong></p>
+                                    <p>años</p>
+                                </div>
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="contenedor-conceptos">
+                                    <p><strong>Importe</strong></p>
+                                    <p>importes</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                                
+                    <div class="divider"></div>
+                                
+                    <div class="sub-total" style="text-align: right; font-size: 10px; margin-right: 2%;">
+                        <p><strong>Subtotal: </strong>subtotal</p>
+                    </div>
+
+                    <div class="divider"></div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="pie" style="margin-top: 60px;">
+                    <div style="text-align: left; margin-right: 2%; font-size: 10px; padding-left: 2%;">
+                        <p style="font-size: 12px;"><u><strong>Medios de Pago: </strong></u></p>
+                        <span>mediosPagos</span>
+                    </div>
+
+                    <div style="text-align: right; margin-right: 2%; font-size: 10px;">
+                        <p style="font-size: 12px;
+                        border: 1px solid black;
+                        padding: 5px 50px 5px 50px;
+                        display: inline-block;">
+                            <strong>Total Recibo: $ totalRecibo</strong>
+                        </p>
+                        <p style="font-style: italic;">Son pesos: pesos</p>
+                        <p style="margin-top: 60px;">Firma y aclaración:.................................................................</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+  </div>
+</body>
+</html>

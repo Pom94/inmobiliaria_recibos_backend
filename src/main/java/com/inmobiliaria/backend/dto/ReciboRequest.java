@@ -19,7 +19,7 @@ public class ReciboRequest {
     private String cuitCliente;
     private String localidadCliente;
     
-    private Integer numContrato;
+    private String numContrato;
     private Date inicioContrato;
     private Date finContrato;
     private String propietario;
@@ -30,8 +30,10 @@ public class ReciboRequest {
     private List<ConceptoRequest> conceptos; // DTO para conceptos
     
     private Double subtotal;
+    private List<MedioPagoRequest> mediosPagos;
+    /*
     private String medioPago;
-    private Double importePago;
+    private Double importePago;*/
     private Double total;
     private String pesos;
 }
