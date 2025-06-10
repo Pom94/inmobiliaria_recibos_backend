@@ -3,6 +3,7 @@ package com.inmobiliaria.backend.service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -64,7 +65,7 @@ public class ReciboService {
     }
 
     private void generarPdfRecibo(Recibo recibo) throws IOException {
-        String htmlTemplate = Files.readString(Paths.get("src/main/resources/templates/recibo_template.html"));
+        String htmlTemplate = Files.readString(Paths.get("src/main/resources/templates/recibo_template.html"), StandardCharsets.UTF_8);
         
         String htmlFinal = reemplazarPlaceholders(htmlTemplate, recibo);
 
@@ -89,20 +90,20 @@ public class ReciboService {
         html = html.replace("Fecha: 00/00/0000", "Fecha: " + sdf.format(recibo.getFechaRecibo()));
         
         //Cliente
-        html = html.replace("clienteApellido, clienteNombre", recibo.getCliente());
-        html = html.replace("clienteDireccion", recibo.getDireccionCliente());
-        html = html.replace("clienteIVA", recibo.getIvaCliente());
-        html = html.replace("cuitCliente", recibo.getCuitCliente());
-        html = html.replace("localidadCliente", recibo.getLocalidadCliente());
+        html = html.replace("clienteApellido, clienteNombre", escapeCustom(recibo.getCliente()));
+        html = html.replace("clienteDireccion", escapeCustom(recibo.getDireccionCliente()));
+        html = html.replace("clienteIVA", escapeCustom(recibo.getIvaCliente()));
+        html = html.replace("cuitCliente", escapeCustom(recibo.getCuitCliente()));
+        html = html.replace("localidadCliente", escapeCustom(recibo.getLocalidadCliente()));
 
         //Contrato
-        html = html.replace("contratoNumero", recibo.getNumContrato());
-        html = html.replace("propiedadCalle", recibo.getCallePropiedad());
-        html = html.replace("propiedadLocalidad", recibo.getLocalidadPropiedad());
+        html = html.replace("contratoNumero", escapeCustom(recibo.getNumContrato()));
+        html = html.replace("propiedadCalle", escapeCustom(recibo.getCallePropiedad()));
+        html = html.replace("propiedadLocalidad", escapeCustom(recibo.getLocalidadPropiedad()));
         html = html.replace("contratoInicio", sdf.format(recibo.getInicioContrato()));
         html = html.replace("contratoFin", sdf.format(recibo.getFinContrato()));
-        html = html.replace("propietarioNombre", recibo.getPropietario());
-        html = html.replace("propietarioCuit", recibo.getCuitPropietario());
+        html = html.replace("propietarioNombre", escapeCustom(recibo.getPropietario()));
+        html = html.replace("propietarioCuit", escapeCustom(recibo.getCuitPropietario()));
 
         //Conceptos
         StringBuilder conceptosHtml = new StringBuilder();
@@ -111,53 +112,26 @@ public class ReciboService {
         StringBuilder importesHtml = new StringBuilder();
 
         for (Concepto concepto : recibo.getConceptos()){
-            conceptosHtml.append("<p>").append(concepto.getConcepto()).append("</p>");
-            periodosHtml.append("<p>").append(concepto.getPeriodo() != null ? concepto.getPeriodo() : "-").append("</p>");
-            aniosHtml.append("<p>").append(concepto.getAnio() != null ? concepto.getAnio() : "-").append("</p>");
+            conceptosHtml.append("<p>").append(escapeCustom(concepto.getConcepto())).append("</p>");
+            periodosHtml.append("<p>").append(concepto.getPeriodo() != null ? escapeCustom(concepto.getPeriodo()) : "-").append("</p>");
+            aniosHtml.append("<p>").append(concepto.getAnio() != null ? escapeCustom(concepto.getAnio()) : "-").append("</p>");
             importesHtml.append("<p>$ ").append(concepto.getImporte() != null ? df.format(concepto.getImporte()) : "-").append("</p>");
 
         }
-        html = html.replace(
-            "<p>conceptos</p>", conceptosHtml.toString()
-        );
+        html = html.replace("<p>conceptos</p>", conceptosHtml.toString());
 
-        html = html.replace(
-            "<p>periodos</p>",
-            periodosHtml.toString()
-        );
+        html = html.replace("<p>periodos</p>",periodosHtml.toString());
 
-        html = html.replace(
-            "<p>años</p>",
-            aniosHtml.toString()
-        );
+        html = html.replace("<p>años</p>", aniosHtml.toString());
 
-        html = html.replace(
-            "<p>importes</p>",
-            importesHtml.toString()
-        );
+        html = html.replace("<p>importes</p>", importesHtml.toString());
 
         html = html.replace("subtotal", df.format(recibo.getSubtotal()));
 
         //Medios de Pagos
-        /*StringBuilder mediosPagosHtml = new StringBuilder();
-        StringBuilder importesPagosHtml = new StringBuilder();
-
-        for (MedioPago medioPago : recibo.getMediosPagos()){
-            mediosPagosHtml.append("<span>").append(medioPago.getMedioPago()).append("</span><span>............................................................</span>");
-            importesPagosHtml.append("<span>").append(df.format(medioPago.getImportePago())).append("</span><br/>");
-
-        }
-        html = html.replace(
-            "<span>mediosPago</span>", mediosPagosHtml.toString()
-        );
-
-        html = html.replace(
-            "<span>importePagos</span>", importesPagosHtml.toString()
-        );*/
-
         StringBuilder mediosPagosHtml = new StringBuilder();
         for (MedioPago medioPago : recibo.getMediosPagos()) {
-            String medio = medioPago.getMedioPago();
+            String medio = escapeCustom(medioPago.getMedioPago());
             String importe = df.format(medioPago.getImportePago());
             // Calcula los puntos suspensivos para alinear el importe
             int dotsLength = 60 - medio.length() - importe.length();
@@ -169,7 +143,7 @@ public class ReciboService {
 
         html = html.replace("Total Recibo: $ totalRecibo", "Total Recibo: $ " + df.format(recibo.getTotal()));
 
-        html = html.replace("Son pesos: pesos", "Son pesos: " + recibo.getPesos());
+        html = html.replace("Son pesos: pesos", "Son pesos: " + escapeCustom(recibo.getPesos()));
 
         return html;
     }
@@ -262,5 +236,14 @@ public class ReciboService {
         .build())
         .collect(Collectors.toList());
     }
+
+    private String escapeCustom(String input) {
+    if (input == null) return "";
+    return input.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+}
 
 }
