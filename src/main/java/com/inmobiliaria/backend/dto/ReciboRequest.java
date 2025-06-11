@@ -27,13 +27,8 @@ public class ReciboRequest {
     private String localidadPropiedad;
     private String cuitPropietario;
     
-    private List<ConceptoRequest> conceptos; // DTO para conceptos
+    private List<ConceptoRequest> conceptos;
     
-    private Double subtotal;
     private List<MedioPagoRequest> mediosPagos;
-    /*
-    private String medioPago;
-    private Double importePago;*/
-    private Double total;
     private String pesos;
 }

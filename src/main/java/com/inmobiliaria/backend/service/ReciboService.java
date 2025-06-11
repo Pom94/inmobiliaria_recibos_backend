@@ -3,7 +3,6 @@ package com.inmobiliaria.backend.service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -65,7 +64,7 @@ public class ReciboService {
     }
 
     private void generarPdfRecibo(Recibo recibo) throws IOException {
-        String htmlTemplate = Files.readString(Paths.get("src/main/resources/templates/recibo_template.html"), StandardCharsets.UTF_8);
+        String htmlTemplate = Files.readString(Paths.get("src/main/resources/templates/recibo_template.html"));
         
         String htmlFinal = reemplazarPlaceholders(htmlTemplate, recibo);
 
@@ -81,6 +80,7 @@ public class ReciboService {
             builder.run();
         }
     }
+
 
     private String reemplazarPlaceholders(String html, Recibo recibo) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -155,6 +155,12 @@ public class ReciboService {
     }
 
     private Recibo construirRecibo(ReciboRequest request, Usuario usuario, List<Concepto> conceptos, List<MedioPago> medioPagos){
+        double subtotal = conceptos.stream()
+                .mapToDouble(concepto -> concepto.getImporte() != null ? concepto.getImporte() : 0.0)
+                .sum();
+
+        double total = subtotal;
+        
         return Recibo.builder()
         .usuario(usuario)
         .fechaRecibo(new Date())
@@ -171,9 +177,9 @@ public class ReciboService {
         .callePropiedad(request.getCallePropiedad())
         .localidadPropiedad(request.getLocalidadPropiedad())
         .cuitPropietario(request.getCuitPropietario())
-        .subtotal(request.getSubtotal())
+        .subtotal(subtotal)
         .mediosPagos(medioPagos)
-        .total(request.getTotal())
+        .total(total)
         .pesos(request.getPesos())
         .build();
     }
@@ -183,7 +189,7 @@ public class ReciboService {
                     .concepto(request.getConcepto())
                     .periodo(request.getPeriodo())
                     .anio(request.getAnio())
-                    .importe(request.getImporte())
+                    .importe(request.getImporte() != null ? request.getImporte() : 0.0)
                     .build();
     }
     private MedioPago mapearMedioPago(MedioPagoRequest request){
