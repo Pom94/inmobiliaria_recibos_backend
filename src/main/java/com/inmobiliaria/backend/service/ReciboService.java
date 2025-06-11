@@ -20,6 +20,7 @@ import com.inmobiliaria.backend.dto.MedioPagoResponse;
 import com.inmobiliaria.backend.dto.ReciboRequest;
 import com.inmobiliaria.backend.dto.ReciboResponse;
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
+import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.model.Concepto;
 import com.inmobiliaria.backend.model.MedioPago;
 import com.inmobiliaria.backend.model.Recibo;
@@ -38,6 +39,14 @@ public class ReciboService {
     private final ReciboRepository reciboRepository;
 
     public ReciboResponse crearRecibo(ReciboRequest request) throws AdminNoEncontradoException, IOException{
+        if (request.getConceptos() == null || request.getConceptos().isEmpty()) {
+            throw new IllegalArgumentException("La lista de conceptos no puede estar vacía.");
+        }
+        if (request.getMediosPagos() == null || request.getMediosPagos().isEmpty()) {
+            throw new IllegalArgumentException("La lista de medios de pago no puede estar vacía.");
+        }
+
+
         Usuario usuario = usuarioRepository.findByUsername("admin")
         .orElseThrow(() -> new AdminNoEncontradoException("Usuario admin no encontrado."));
 
@@ -148,12 +157,6 @@ public class ReciboService {
         return html;
     }
 
-    public List<ReciboResponse> listarTodos() {
-        return reciboRepository.findAll().stream()
-        .map(this::mapearAResponse)
-        .collect(Collectors.toList());
-    }
-
     private Recibo construirRecibo(ReciboRequest request, Usuario usuario, List<Concepto> conceptos, List<MedioPago> medioPagos){
         double subtotal = conceptos.stream()
                 .mapToDouble(concepto -> concepto.getImporte() != null ? concepto.getImporte() : 0.0)
@@ -250,6 +253,17 @@ public class ReciboService {
                 .replace(">", "&gt;")
                 .replace("\"", "&quot;")
                 .replace("'", "&#39;");
-}
+    }
 
+    public List<ReciboResponse> listarTodos() {
+        return reciboRepository.findAll().stream()
+        .map(this::mapearAResponse)
+        .collect(Collectors.toList());
+    }
+
+    public ReciboResponse obtenerRecibo(Integer numRecibo) throws ReciboNoEncontradoException{
+        Recibo recibo = reciboRepository.findById(numRecibo)
+            .orElseThrow(() -> new ReciboNoEncontradoException("Recibo con número " + numRecibo + " no encontrado."));
+        return mapearAResponse(recibo);
+    }
 }
