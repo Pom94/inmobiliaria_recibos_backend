@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.AdminYaExisteException;
+import com.inmobiliaria.backend.exception.ContraseniaIncorrectaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 
 @ControllerAdvice
@@ -30,4 +31,13 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         error.setErrorMessage(exceptionMessage);
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
+    @ExceptionHandler(value = {ContraseniaIncorrectaException.class})
+    protected ResponseEntity<Object> handlerIncorrecto(Exception ex, WebRequest request){
+        String exceptionMessage = ex.getMessage();
+        CustomApiError error = new CustomApiError();
+        error.setErrorMessage(exceptionMessage);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+    
 }
