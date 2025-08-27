@@ -32,20 +32,6 @@ public class Recibo {
     private Usuario usuario;
     private Date fechaRecibo;
 
-    private String cliente;
-    private String direccionCliente;
-    private String ivaCliente;
-    private String cuitCliente;
-    private String localidadCliente;
-
-    private String numContrato;
-    private Date inicioContrato;
-    private Date finContrato;
-    private String propietario;
-    private String callePropiedad;
-    private String localidadPropiedad;
-    private String cuitPropietario;
-
     @ElementCollection
     @CollectionTable(name = "recibo_conceptos", joinColumns = @JoinColumn(name = "recibo_id"))
     private List<Concepto> conceptos;
@@ -56,5 +42,11 @@ public class Recibo {
     private List<MedioPago> mediosPagos;
     private Double total;
     private String pesos;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+    @ManyToOne
+    @JoinColumn(name = "propiedad_id")
+    private Propiedad propiedad;
 
 }

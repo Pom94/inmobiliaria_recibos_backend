@@ -10,7 +10,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.AdminYaExisteException;
+import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.ContraseniaIncorrectaException;
+import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 
 @ControllerAdvice
@@ -24,7 +26,7 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {AdminNoEncontradoException.class, ReciboNoEncontradoException.class})
+    @ExceptionHandler(value = {AdminNoEncontradoException.class, ReciboNoEncontradoException.class, ClienteNoEncontradoException.class, PropiedadNoEncontradaException.class})
     protected ResponseEntity<Object> handlerNoEncontrado(Exception ex, WebRequest request){
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();

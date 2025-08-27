@@ -16,6 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.inmobiliaria.backend.dto.ReciboRequest;
 import com.inmobiliaria.backend.dto.ReciboResponse;
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
+import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
+import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.service.ReciboService;
 
@@ -29,7 +31,7 @@ public class ReciboController {
     private final ReciboService reciboService;
     
     @PostMapping("/crear")
-    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException{
+    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException{
         ReciboResponse creado = reciboService.crearRecibo(request);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
