@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import com.inmobiliaria.backend.dto.ReciboRequest;
 import com.inmobiliaria.backend.dto.ReciboResponse;
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
+import com.inmobiliaria.backend.exception.GenerarPDFException;
 import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.model.Cliente;
@@ -90,13 +92,22 @@ public class ReciboService {
 
         System.out.println("HTML generado:\n" + htmlFinal);
 
-        String outputPdfPath = "src/main/resources/PDF_Recibos/recibo_" + recibo.getNumeroRecibo() + ".pdf";
+        Path pdfDir = Paths.get("src/main/resources/PDF_Recibos");
+        try {
+            Files.createDirectories(pdfDir);
+        } catch (IOException e) {
+            throw new GenerarPDFException("Error al crear la carpeta para PDFs: " + pdfDir, e);
+        }
+
+        String outputPdfPath = pdfDir.resolve("recibo_" + recibo.getNumeroRecibo() + ".pdf").toString();
 
         try (OutputStream os = new FileOutputStream(outputPdfPath)) {
             PdfRendererBuilder builder = new PdfRendererBuilder();
             builder.withHtmlContent(htmlFinal, Paths.get("src/main/resources/templates").toAbsolutePath().toUri().toString());
             builder.toStream(os);
             builder.run();
+        } catch (IOException e) {
+            throw new GenerarPDFException("Error al generar el PDF para el recibo " + recibo.getNumeroRecibo(), e);
         }
     }
 
