@@ -19,5 +19,6 @@ public class PropiedadRequest {
     private String direccionPropietario;
     private String localidadPropiedad;
     private String cuitPropietario;
+    private Boolean activo;
 
 }

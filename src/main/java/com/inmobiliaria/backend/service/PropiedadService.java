@@ -21,6 +21,7 @@ public class PropiedadService {
 
     public List<PropiedadResponse> listaPropiedades() {
         return propiedadRepository.findAll().stream()
+                .filter(Propiedad::isActivo)
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
@@ -40,6 +41,7 @@ public class PropiedadService {
                 .direccionPropietario(request.getDireccionPropietario())
                 .localidadPropiedad(request.getLocalidadPropiedad())
                 .cuitPropietario(request.getCuitPropietario())
+                .activo(true)
                 .build();
         propiedad = propiedadRepository.save(propiedad);
         return mapToResponse(propiedad);
@@ -74,13 +76,6 @@ public class PropiedadService {
         return mapToResponse(propiedad);
     }
 
-    public void eliminarPropiedad(Integer id) throws PropiedadNoEncontradaException {
-        if (!propiedadRepository.existsById(id)) {
-            throw new PropiedadNoEncontradaException("Propiedad con ID " + id + " no encontrada.");
-        }
-        propiedadRepository.deleteById(id);
-    }
-
     private PropiedadResponse mapToResponse(Propiedad propiedad) {
         return PropiedadResponse.builder()
                 .id(propiedad.getId())
@@ -91,6 +86,21 @@ public class PropiedadService {
                 .direccionPropietario(propiedad.getDireccionPropietario())
                 .localidadPropiedad(propiedad.getLocalidadPropiedad())
                 .cuitPropietario(propiedad.getCuitPropietario())
+                .activo(propiedad.isActivo())
                 .build();
+    }
+
+        public void desactivarPropiedad(Integer id) throws PropiedadNoEncontradaException {
+        Propiedad propiedad = propiedadRepository.findById(id)
+                .orElseThrow(() -> new PropiedadNoEncontradaException("Propiedad con ID " + id + " no encontrada."));
+        propiedad.setActivo(false);
+        propiedadRepository.save(propiedad);
+    }
+
+    public List<PropiedadResponse> listaExPropiedades() {
+        return propiedadRepository.findAll().stream()
+                .filter(propiedad -> !propiedad.isActivo())
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 }

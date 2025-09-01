@@ -3,7 +3,6 @@ package com.inmobiliaria.backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,9 +45,14 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.modificarCliente(id, request));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Integer id) throws ClienteNoEncontradoException {
-        clienteService.eliminarCliente(id);
+    @PutMapping("/{id}/desactivar")
+    public ResponseEntity<Void> desactivarCliente(@PathVariable Integer id) throws ClienteNoEncontradoException {
+        clienteService.desactivarCliente(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/inactivos")
+    public List<ClienteResponse> listaExClientes() {
+        return clienteService.listaExClientes();
     }
 }

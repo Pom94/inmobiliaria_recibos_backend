@@ -16,5 +16,5 @@ public class ClienteResponse {
     private String iva;
     private String cuit;
     private String localidad;
-
+    private boolean activo;
 }

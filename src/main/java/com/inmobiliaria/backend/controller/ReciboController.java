@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,8 +17,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.inmobiliaria.backend.dto.ReciboRequest;
 import com.inmobiliaria.backend.dto.ReciboResponse;
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
+import com.inmobiliaria.backend.exception.ClienteInactivoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.GenerarPDFException;
+import com.inmobiliaria.backend.exception.PropiedadInactivaException;
 import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.service.ReciboService;
@@ -32,7 +35,7 @@ public class ReciboController {
     private final ReciboService reciboService;
     
     @PostMapping("/crear")
-    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException, GenerarPDFException{
+    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException, GenerarPDFException, ClienteInactivoException, PropiedadInactivaException{
         ReciboResponse creado = reciboService.crearRecibo(request);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -50,5 +53,11 @@ public class ReciboController {
     @GetMapping("/{numRecibo}")
     public ResponseEntity<ReciboResponse> obtenerRecibo(@PathVariable Integer numRecibo) throws ReciboNoEncontradoException{
         return ResponseEntity.ok(reciboService.obtenerRecibo(numRecibo));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarRecibo(@PathVariable Integer id) throws ReciboNoEncontradoException {
+        reciboService.eliminarRecibo(id);
+        return ResponseEntity.noContent().build();
     }
 }

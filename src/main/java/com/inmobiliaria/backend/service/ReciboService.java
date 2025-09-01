@@ -21,8 +21,10 @@ import com.inmobiliaria.backend.dto.MedioPagoResponse;
 import com.inmobiliaria.backend.dto.ReciboRequest;
 import com.inmobiliaria.backend.dto.ReciboResponse;
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
+import com.inmobiliaria.backend.exception.ClienteInactivoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.GenerarPDFException;
+import com.inmobiliaria.backend.exception.PropiedadInactivaException;
 import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.model.Cliente;
@@ -38,9 +40,11 @@ import com.inmobiliaria.backend.repository.UsuarioRepository;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReciboService {
 
     private final UsuarioRepository usuarioRepository;
@@ -48,7 +52,7 @@ public class ReciboService {
     private final ClienteRepository clienteRepository;
     private final PropiedadRepository propiedadRepository;
 
-    public ReciboResponse crearRecibo(ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException {
+    public ReciboResponse crearRecibo(ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException, ClienteInactivoException, PropiedadInactivaException {
         if (request.getConceptos() == null || request.getConceptos().isEmpty()) {
             throw new IllegalArgumentException("La lista de conceptos no puede estar vacía.");
         }
@@ -59,8 +63,15 @@ public class ReciboService {
         // buscar Cliente y Propiedad por id
         Cliente cliente = clienteRepository.findById(request.getClienteId())
                 .orElseThrow(() -> new ClienteNoEncontradoException("Cliente con ID " + request.getClienteId() + " no encontrado."));
+        if (!cliente.isActivo()) {
+            throw new ClienteInactivoException("No se puede crear un recibo para un cliente inactivo con ID " + request.getClienteId());
+        }
+
         Propiedad propiedad = propiedadRepository.findById(request.getPropiedadId())
                 .orElseThrow(() -> new PropiedadNoEncontradaException("Propiedad con ID " + request.getPropiedadId() + " no encontrada."));
+        if (!propiedad.isActivo()) {
+            throw new PropiedadInactivaException("No se puede crear un recibo para una propiedad inactiva con ID " + request.getPropiedadId());
+        }
 
         Usuario usuario = usuarioRepository.findByUsername("admin")
                 .orElseThrow(() -> new AdminNoEncontradoException("Usuario admin no encontrado."));
@@ -261,5 +272,22 @@ public class ReciboService {
         Recibo recibo = reciboRepository.findById(numRecibo)
                 .orElseThrow(() -> new ReciboNoEncontradoException("Recibo con número " + numRecibo + " no encontrado."));
         return mapearAResponse(recibo);
+    }
+
+    public void eliminarRecibo(Integer id) throws ReciboNoEncontradoException {
+        if (!reciboRepository.existsById(id)) {
+            throw new ReciboNoEncontradoException("Recibo con ID " + id + " no encontrado.");
+        }
+        reciboRepository.deleteById(id);
+        log.info("Recibo con ID {} eliminado", id);
+        
+        //eliminar pdf asociado, si está
+        Path pdfPath = Paths.get("src/main/resources/PDF_Recibos/recibo_" + id + ".pdf");
+        try {
+            Files.deleteIfExists(pdfPath);
+            log.info("PDF del recibo {} eliminado", id);
+        } catch (IOException e) {
+            log.warn("No se pudo eliminar el PDF del recibo {}: {}", id, e.getMessage());
+        }
     }
 }

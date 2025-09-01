@@ -10,9 +10,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.AdminYaExisteException;
+import com.inmobiliaria.backend.exception.ClienteInactivoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.ContraseniaIncorrectaException;
 import com.inmobiliaria.backend.exception.GenerarPDFException;
+import com.inmobiliaria.backend.exception.PropiedadInactivaException;
 import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 
@@ -44,11 +46,18 @@ public class ApiResponseEntityExceptionHandler extends ResponseEntityExceptionHa
     }
 
     @ExceptionHandler(value = {GenerarPDFException.class})
-    protected ResponseEntity<Object> handlerPdfGenerationException(Exception ex, WebRequest request) {
+    protected ResponseEntity<Object> handlerGenerarPDFException(Exception ex, WebRequest request) {
         String exceptionMessage = ex.getMessage();
         CustomApiError error = new CustomApiError();
         error.setErrorMessage(exceptionMessage);
         return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
     
+    @ExceptionHandler(value = {ClienteInactivoException.class, PropiedadInactivaException.class})
+    protected ResponseEntity<Object> handlerInactivo(Exception ex, WebRequest request) {
+        String exceptionMessage = ex.getMessage();
+        CustomApiError error = new CustomApiError();
+        error.setErrorMessage(exceptionMessage);
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

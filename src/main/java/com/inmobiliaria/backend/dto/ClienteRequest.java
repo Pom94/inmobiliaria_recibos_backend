@@ -16,4 +16,5 @@ public class ClienteRequest {
     private String iva;
     private String cuit;
     private String localidad;
+    private Boolean activo;
 }

@@ -36,4 +36,5 @@ public class Propiedad {
     private String cuitPropietario;
     @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL)
     private List<Recibo> recibos;
+    private boolean activo = true;
 }

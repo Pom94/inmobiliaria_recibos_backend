@@ -21,6 +21,7 @@ public class ClienteService {
 
     public List<ClienteResponse> listaClientes() {
         return clienteRepository.findAll().stream()
+                .filter(Cliente::isActivo)
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
@@ -38,6 +39,7 @@ public class ClienteService {
                 .iva(request.getIva())
                 .cuit(request.getCuit())
                 .localidad(request.getLocalidad())
+                .activo(true)
                 .build();
         cliente = clienteRepository.save(cliente);
         return mapToResponse(cliente);
@@ -66,13 +68,6 @@ public class ClienteService {
         return mapToResponse(cliente);
     }
 
-    public void eliminarCliente(Integer id) throws ClienteNoEncontradoException {
-        if (!clienteRepository.existsById(id)) {
-            throw new ClienteNoEncontradoException("Cliente con ID " + id + " no encontrado.");
-        }
-        clienteRepository.deleteById(id);
-    }
-
     private ClienteResponse mapToResponse(Cliente cliente) {
         return ClienteResponse.builder()
                 .id(cliente.getId())
@@ -81,6 +76,22 @@ public class ClienteService {
                 .iva(cliente.getIva())
                 .cuit(cliente.getCuit())
                 .localidad(cliente.getLocalidad())
+                .activo(cliente.isActivo())
                 .build();
     }
+
+    public void desactivarCliente(Integer id) throws ClienteNoEncontradoException {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNoEncontradoException("Cliente con ID " + id + " no encontrado."));
+        cliente.setActivo(false);
+        clienteRepository.save(cliente);
+    }
+
+    public List<ClienteResponse> listaExClientes() {
+        return clienteRepository.findAll().stream()
+                .filter(cliente -> !cliente.isActivo())
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+    
 }

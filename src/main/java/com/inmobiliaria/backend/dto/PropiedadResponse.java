@@ -20,4 +20,5 @@ public class PropiedadResponse {
     private String direccionPropietario;
     private String localidadPropiedad;
     private String cuitPropietario;
+    private boolean activo;
 }

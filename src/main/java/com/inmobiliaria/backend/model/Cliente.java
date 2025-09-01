@@ -31,5 +31,6 @@ public class Cliente {
     private String localidad;
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Recibo> recibos;
+    private boolean activo = true;
 
 }
