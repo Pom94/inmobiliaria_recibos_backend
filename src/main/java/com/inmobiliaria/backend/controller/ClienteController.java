@@ -55,4 +55,10 @@ public class ClienteController {
     public List<ClienteResponse> listaExClientes() {
         return clienteService.listaExClientes();
     }
+
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activarCliente(@PathVariable Integer id) throws ClienteNoEncontradoException {
+        clienteService.activarCliente(id);
+        return ResponseEntity.noContent().build();
+    }
 }

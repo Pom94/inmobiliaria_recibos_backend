@@ -93,5 +93,12 @@ public class ClienteService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+
+    public void activarCliente(Integer id) throws ClienteNoEncontradoException {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNoEncontradoException("Cliente con ID " + id + " no encontrado."));
+        cliente.setActivo(true);
+        clienteRepository.save(cliente);
+    }
     
 }
