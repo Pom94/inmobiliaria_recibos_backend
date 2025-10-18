@@ -103,4 +103,11 @@ public class PropiedadService {
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
+
+    public void activarPropiedad(Integer id) throws PropiedadNoEncontradaException{
+        Propiedad propiedad = propiedadRepository.findById(id)
+                .orElseThrow(() -> new PropiedadNoEncontradaException("Propiedad con ID " + id + " no encontrada."));
+        propiedad.setActivo(true);
+        propiedadRepository.save(propiedad);
+    }
 }

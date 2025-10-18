@@ -55,4 +55,10 @@ public class PropiedadController {
     public List<PropiedadResponse> listaExPropiedades() {
         return propiedadService.listaExPropiedades();
     }
+
+    @PutMapping("/{id}/activar")
+    public ResponseEntity<Void> activarPropiedad(@PathVariable Integer id) throws PropiedadNoEncontradaException {
+        propiedadService.activarPropiedad(id);
+        return ResponseEntity.noContent().build();
+    }
 }
