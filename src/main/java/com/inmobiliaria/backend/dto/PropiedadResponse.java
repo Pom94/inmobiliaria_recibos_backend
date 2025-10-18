@@ -17,7 +17,7 @@ public class PropiedadResponse {
     private Date inicioContrato;
     private Date finContrato;
     private String nombrePropietario;
-    private String direccionPropietario;
+    private String direccionPropiedad;
     private String localidadPropiedad;
     private String cuitPropietario;
     private boolean activo;

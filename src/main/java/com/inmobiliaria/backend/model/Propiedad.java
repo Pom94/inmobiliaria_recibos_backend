@@ -31,7 +31,7 @@ public class Propiedad {
     private Date inicioContrato;
     private Date finContrato;
     private String nombrePropietario;
-    private String direccionPropietario;
+    private String direccionPropiedad;
     private String localidadPropiedad;
     private String cuitPropietario;
     @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL)

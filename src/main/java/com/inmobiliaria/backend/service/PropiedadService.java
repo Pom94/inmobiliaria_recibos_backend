@@ -38,7 +38,7 @@ public class PropiedadService {
                 .inicioContrato(request.getInicioContrato())
                 .finContrato(request.getFinContrato())
                 .nombrePropietario(request.getNombrePropietario())
-                .direccionPropietario(request.getDireccionPropietario())
+                .direccionPropiedad(request.getDireccionPropiedad())
                 .localidadPropiedad(request.getLocalidadPropiedad())
                 .cuitPropietario(request.getCuitPropietario())
                 .activo(true)
@@ -62,8 +62,8 @@ public class PropiedadService {
         if (request.getNombrePropietario() != null){
             propiedad.setNombrePropietario(request.getNombrePropietario());
         }
-        if (request.getDireccionPropietario() != null){
-            propiedad.setDireccionPropietario(request.getDireccionPropietario());
+        if (request.getDireccionPropiedad() != null){
+            propiedad.setDireccionPropiedad(request.getDireccionPropiedad());
         }
         if (request.getLocalidadPropiedad() != null) {
             propiedad.setLocalidadPropiedad(request.getLocalidadPropiedad());
@@ -83,7 +83,7 @@ public class PropiedadService {
                 .inicioContrato(propiedad.getInicioContrato())
                 .finContrato(propiedad.getFinContrato())
                 .nombrePropietario(propiedad.getNombrePropietario())
-                .direccionPropietario(propiedad.getDireccionPropietario())
+                .direccionPropiedad(propiedad.getDireccionPropiedad())
                 .localidadPropiedad(propiedad.getLocalidadPropiedad())
                 .cuitPropietario(propiedad.getCuitPropietario())
                 .activo(propiedad.isActivo())
