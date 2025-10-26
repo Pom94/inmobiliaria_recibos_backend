@@ -138,7 +138,7 @@ public class ReciboService {
 
         //propiedad
         html = html.replace("contratoNumero", escapeCustom(recibo.getPropiedad().getNumContrato()));
-        html = html.replace("propiedadCalle", escapeCustom(recibo.getPropiedad().getDireccionPropietario()));
+        html = html.replace("propiedadCalle", escapeCustom(recibo.getPropiedad().getDireccionPropiedad()));
         html = html.replace("propiedadLocalidad", escapeCustom(recibo.getPropiedad().getLocalidadPropiedad()));
         html = html.replace("contratoInicio", sdf.format(recibo.getPropiedad().getInicioContrato()));
         html = html.replace("contratoFin", sdf.format(recibo.getPropiedad().getFinContrato()));
