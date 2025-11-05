@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "propiedad")
+@Table(name = "contrato")
 
-public class Propiedad {
+public class Contrato {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Propiedad {
     private String direccionPropiedad;
     private String localidadPropiedad;
     private String cuitPropietario;
-    @OneToMany(mappedBy = "propiedad", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL)
     private List<Recibo> recibos;
     private boolean activo = true;
 }

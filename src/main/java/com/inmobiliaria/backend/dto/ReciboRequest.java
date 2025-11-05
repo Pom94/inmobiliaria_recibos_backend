@@ -18,5 +18,5 @@ public class ReciboRequest {
     private String pesos;
 
     private Integer clienteId;
-    private Integer propiedadId;
+    private Integer contratoId;
 }

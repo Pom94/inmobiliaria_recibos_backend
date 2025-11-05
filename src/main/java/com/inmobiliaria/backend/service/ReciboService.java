@@ -24,17 +24,17 @@ import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.ClienteInactivoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.GenerarPDFException;
-import com.inmobiliaria.backend.exception.PropiedadInactivaException;
-import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
+import com.inmobiliaria.backend.exception.ContratoInactivoException;
+import com.inmobiliaria.backend.exception.ContratoNoEncontradoException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.model.Cliente;
 import com.inmobiliaria.backend.model.Concepto;
 import com.inmobiliaria.backend.model.MedioPago;
-import com.inmobiliaria.backend.model.Propiedad;
+import com.inmobiliaria.backend.model.Contrato;
 import com.inmobiliaria.backend.model.Recibo;
 import com.inmobiliaria.backend.model.Usuario;
 import com.inmobiliaria.backend.repository.ClienteRepository;
-import com.inmobiliaria.backend.repository.PropiedadRepository;
+import com.inmobiliaria.backend.repository.ContratoRepository;
 import com.inmobiliaria.backend.repository.ReciboRepository;
 import com.inmobiliaria.backend.repository.UsuarioRepository;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
@@ -50,9 +50,9 @@ public class ReciboService {
     private final UsuarioRepository usuarioRepository;
     private final ReciboRepository reciboRepository;
     private final ClienteRepository clienteRepository;
-    private final PropiedadRepository propiedadRepository;
+    private final ContratoRepository contratoRepository;
 
-    public ReciboResponse crearRecibo(ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException, ClienteInactivoException, PropiedadInactivaException {
+    public ReciboResponse crearRecibo(ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, ContratoNoEncontradoException, ClienteInactivoException, ContratoInactivoException {
         if (request.getConceptos() == null || request.getConceptos().isEmpty()) {
             throw new IllegalArgumentException("La lista de conceptos no puede estar vacía.");
         }
@@ -60,17 +60,17 @@ public class ReciboService {
             throw new IllegalArgumentException("La lista de medios de pago no puede estar vacía.");
         }
 
-        // buscar Cliente y Propiedad por id
+        // buscar Cliente y Contrato por id
         Cliente cliente = clienteRepository.findById(request.getClienteId())
                 .orElseThrow(() -> new ClienteNoEncontradoException("Cliente con ID " + request.getClienteId() + " no encontrado."));
         if (!cliente.isActivo()) {
             throw new ClienteInactivoException("No se puede crear un recibo para un cliente inactivo con ID " + request.getClienteId());
         }
 
-        Propiedad propiedad = propiedadRepository.findById(request.getPropiedadId())
-                .orElseThrow(() -> new PropiedadNoEncontradaException("Propiedad con ID " + request.getPropiedadId() + " no encontrada."));
-        if (!propiedad.isActivo()) {
-            throw new PropiedadInactivaException("No se puede crear un recibo para una propiedad inactiva con ID " + request.getPropiedadId());
+        Contrato contrato = contratoRepository.findById(request.getContratoId())
+                .orElseThrow(() -> new ContratoNoEncontradoException("Contrato con ID " + request.getContratoId() + " no encontrado."));
+        if (!contrato.isActivo()) {
+            throw new ContratoInactivoException("No se puede crear un recibo para un contrato inactivo con ID " + request.getContratoId());
         }
 
         Usuario usuario = usuarioRepository.findByUsername("admin")
@@ -84,7 +84,7 @@ public class ReciboService {
                 .map(this::mapearMedioPago)
                 .collect(Collectors.toList());
 
-        Recibo recibo = construirRecibo(request, usuario, conceptosEntidad, mediosPagosEntidad, cliente, propiedad);
+        Recibo recibo = construirRecibo(request, usuario, conceptosEntidad, mediosPagosEntidad, cliente, contrato);
 
         recibo = reciboRepository.save(recibo);
 
@@ -137,13 +137,13 @@ public class ReciboService {
         html = html.replace("localidadCliente", escapeCustom(recibo.getCliente().getLocalidad()));
 
         //propiedad
-        html = html.replace("contratoNumero", escapeCustom(recibo.getPropiedad().getNumContrato()));
-        html = html.replace("propiedadCalle", escapeCustom(recibo.getPropiedad().getDireccionPropiedad()));
-        html = html.replace("propiedadLocalidad", escapeCustom(recibo.getPropiedad().getLocalidadPropiedad()));
-        html = html.replace("contratoInicio", sdf.format(recibo.getPropiedad().getInicioContrato()));
-        html = html.replace("contratoFin", sdf.format(recibo.getPropiedad().getFinContrato()));
-        html = html.replace("propietarioNombre", escapeCustom(recibo.getPropiedad().getNombrePropietario()));
-        html = html.replace("propietarioCuit", escapeCustom(recibo.getPropiedad().getCuitPropietario()));
+        html = html.replace("contratoNumero", escapeCustom(recibo.getContrato().getNumContrato()));
+        html = html.replace("propiedadCalle", escapeCustom(recibo.getContrato().getDireccionPropiedad()));
+        html = html.replace("propiedadLocalidad", escapeCustom(recibo.getContrato().getLocalidadPropiedad()));
+        html = html.replace("contratoInicio", sdf.format(recibo.getContrato().getInicioContrato()));
+        html = html.replace("contratoFin", sdf.format(recibo.getContrato().getFinContrato()));
+        html = html.replace("propietarioNombre", escapeCustom(recibo.getContrato().getNombrePropietario()));
+        html = html.replace("propietarioCuit", escapeCustom(recibo.getContrato().getCuitPropietario()));
 
         // onceptos
         StringBuilder conceptosHtml = new StringBuilder();
@@ -181,7 +181,7 @@ public class ReciboService {
         return html;
     }
 
-    private Recibo construirRecibo(ReciboRequest request, Usuario usuario, List<Concepto> conceptos, List<MedioPago> medioPagos, Cliente cliente, Propiedad propiedad) {
+    private Recibo construirRecibo(ReciboRequest request, Usuario usuario, List<Concepto> conceptos, List<MedioPago> medioPagos, Cliente cliente, Contrato contrato) {
         double subtotal = conceptos.stream()
                 .mapToDouble(concepto -> concepto.getImporte() != null ? concepto.getImporte() : 0.0)
                 .sum();
@@ -195,7 +195,7 @@ public class ReciboService {
                 .fechaRecibo(new Date())
                 .conceptos(conceptos)
                 .cliente(cliente)
-                .propiedad(propiedad)
+                .contrato(contrato)
                 .subtotal(subtotal)
                 .mediosPagos(medioPagos)
                 .total(total)
@@ -229,7 +229,7 @@ public class ReciboService {
                 .total(recibo.getTotal())
                 .pesos(recibo.getPesos())
                 .clienteId(recibo.getCliente().getId())
-                .propiedadId(recibo.getPropiedad().getId())
+                .contratoId(recibo.getContrato().getId())
                 .build();
     }
 

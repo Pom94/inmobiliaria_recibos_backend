@@ -18,7 +18,7 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private static final String clave = "dGhpc2lzYXNlY3JldGtleXRoaXNpc2FzZWNyZXRrZXk";
+    private static final String clave = "dGhpc2lzYXNlY3JldGtleXRoaXNpc2FzZWNyZXRrZXk"; //esto debería ir guardado en un lugar seguro
 
     public String getToken(UserDetails usuario) {
         return getToken(new HashMap<>(), usuario);

@@ -20,8 +20,8 @@ import com.inmobiliaria.backend.exception.AdminNoEncontradoException;
 import com.inmobiliaria.backend.exception.ClienteInactivoException;
 import com.inmobiliaria.backend.exception.ClienteNoEncontradoException;
 import com.inmobiliaria.backend.exception.GenerarPDFException;
-import com.inmobiliaria.backend.exception.PropiedadInactivaException;
-import com.inmobiliaria.backend.exception.PropiedadNoEncontradaException;
+import com.inmobiliaria.backend.exception.ContratoInactivoException;
+import com.inmobiliaria.backend.exception.ContratoNoEncontradoException;
 import com.inmobiliaria.backend.exception.ReciboNoEncontradoException;
 import com.inmobiliaria.backend.service.ReciboService;
 
@@ -35,7 +35,7 @@ public class ReciboController {
     private final ReciboService reciboService;
     
     @PostMapping("/crear")
-    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, PropiedadNoEncontradaException, GenerarPDFException, ClienteInactivoException, PropiedadInactivaException{
+    private ResponseEntity<ReciboResponse> crearRecibo(@RequestBody ReciboRequest request) throws AdminNoEncontradoException, IOException, ClienteNoEncontradoException, ContratoNoEncontradoException, GenerarPDFException, ClienteInactivoException, ContratoInactivoException{
         ReciboResponse creado = reciboService.crearRecibo(request);
         URI location = ServletUriComponentsBuilder
             .fromCurrentRequest()

@@ -46,7 +46,7 @@ public class Recibo {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
     @ManyToOne
-    @JoinColumn(name = "propiedad_id")
-    private Propiedad propiedad;
+    @JoinColumn(name = "contrato_id")
+    private Contrato contrato;
 
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PropiedadResponse {
+public class ContratoResponse {
     private Integer id;
     private String numContrato;
     private Date inicioContrato;
