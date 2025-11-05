@@ -27,7 +27,7 @@ public class SecurityConfig {
         return http
             .cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.addAllowedOrigin("https://inmobiliaria-recibos-frontend.onrender.com", "http://localhost:3000");
+                corsConfig.addAllowedOrigin("http://localhost:3000"); // "https://inmobiliaria-recibos-frontend.onrender.com"/ "http://localhost:3000"
                 corsConfig.addAllowedMethod("*");
                 corsConfig.addAllowedHeader("*");
                 corsConfig.setAllowCredentials(true);
