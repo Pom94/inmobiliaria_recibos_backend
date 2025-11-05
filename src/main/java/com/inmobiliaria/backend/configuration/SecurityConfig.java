@@ -25,6 +25,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         return http
+            .cors(cors -> cors.configurationSource(request -> {
+                var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                corsConfig.addAllowedOrigin("http://localhost:3000");
+                corsConfig.addAllowedMethod("*");
+                corsConfig.addAllowedHeader("*");
+                corsConfig.setAllowCredentials(true);
+                return corsConfig;
+            }))
             .csrf(csrf -> 
                 csrf
                 .disable())
