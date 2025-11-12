@@ -87,7 +87,7 @@ git clone https://github.com/Pom94/inmobiliaria_recibos_backend.git
 cd inmobiliaria_recibos_backend
 mvn spring-boot:run
 ```
-> La **API** arranca en ``http://localhost:8080``
+> La **API** arranca en ``http://localhost:8080``.
 > Base de datos: ``inmobiliaria.db`` (se crea automáticamente en el directorio del proyecto)
 
 ### Documentación Adicional
