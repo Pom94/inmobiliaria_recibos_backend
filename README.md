@@ -89,6 +89,7 @@ cd inmobiliaria_recibos_backend
 mvn spring-boot:run
 ```
 > La **API** arranca en ``http://localhost:8080``.
+> Deberá cambiar la configuraciòn de CORS. En **\src\main\java\com\inmobiliaria\backend\configuration\SecurityConfig.java**, cambiar el origen a la dirección del frontend que vaya a consumir esta API ("http://localhost:3000").
 > Base de datos: ``inmobiliaria.db`` (se crea automáticamente en el directorio del proyecto)
 
 ### Documentación Adicional
