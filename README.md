@@ -60,6 +60,7 @@ API que permite:
 ### Colección Postman
 
 Archivo exportado: [`docs/Inmobiliaria.postman_collection.json`](./docs/Inmobiliaria.postman_collection.json)
+> **Nota:** Para la autenticación JWT deberá copiar el token dado al momento de iniciar sesión, en la sección **Authorization**, elegir en **Auth Type** la opción **Bearer Token** y en **Token** pegar el token copiado previamente. Esto para cada consulta.
 
 ### Despliegue
 
