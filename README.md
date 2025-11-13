@@ -94,6 +94,8 @@ mvn spring-boot:run
 
 > Base de datos: ``inmobiliaria.db`` (se crea automáticamente en el directorio del proyecto)
 
+> Para registrarse, el programa aceptara como usuario "admin", ya que el programa está pensado (por ahora) para un único cliente administrador
+
 ### Documentación Adicional
 
 | Archivo | Descripción |
